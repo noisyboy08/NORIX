@@ -29,6 +29,16 @@ const OFFICIAL_BRANDS = {
   paytm:'paytm.com', phonepe:'phonepe.com', razorpay:'razorpay.com'
 };
 const SCAM_DOMAINS  = /\.(xyz|top|club|tk|ml|ga|cf|site|online|zip|icu|pw)\b/;
+const TRUSTED_HOST_SUFFIXES = ['norix.vercel.app', 'norix8.vercel.app', 'localhost', '127.0.0.1'];
+
+function isTrustedHostUrl(url) {
+  try {
+    const host = new URL(url).hostname.toLowerCase();
+    return TRUSTED_HOST_SUFFIXES.some((suffix) => host === suffix || host.endsWith(`.${suffix}`));
+  } catch {
+    return false;
+  }
+}
 const DISPOSABLE_EMAIL_DOMAINS = [
   'mailinator.com','guerrillamail.com','tempmail.com','throwaway.email',
   'fakeinbox.com','sharklasers.com','guerrillamailblock.com','spam4.me',
@@ -378,6 +388,7 @@ function injectOutlookBadges() {
 // WHATSAPP WEB SCANNER
 // ════════════════════════════════════════════════════════════════════════
 function scoreURL(url) {
+  if (isTrustedHostUrl(url)) return 0;
   let s = 0;
   if (!url.startsWith('https://')) s += 20;
   if (/\d{1,3}\.\d{1,3}/.test(url)) s += 25;
@@ -509,6 +520,7 @@ function createFloatingBadge(score) {
 // WARNING BANNER
 // ════════════════════════════════════════════════════════════════════════
 function showBanner(score) {
+  if (isTrustedHostUrl(location.href)) return;
   if (document.querySelector('.pg-banner')) return;
   const cls = score >= 80 ? 'pg-banner-critical' : score >= 60 ? 'pg-banner-high' : 'pg-banner-medium';
   const icon = score >= 80 ? '🚨' : '⚠️';
@@ -526,6 +538,7 @@ function showBanner(score) {
 // PANIC MODE — Full-screen block for score 100
 // ════════════════════════════════════════════════════════════════════════
 function showPanicMode(score) {
+  if (isTrustedHostUrl(location.href)) return;
   if (document.getElementById('pg-panic-overlay')) return;
   const overlay = document.createElement('div');
   overlay.id = 'pg-panic-overlay';

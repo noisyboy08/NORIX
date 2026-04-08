@@ -6,6 +6,16 @@ const SB_URL = 'https://qyjevtuwsuizfyxakobu.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF5amV2dHV3c3VpemZ5eGFrb2J1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4MjMzNjAsImV4cCI6MjA4OTM5OTM2MH0.DBzPwcBpqlRKiseFxzs0BIsO7WapMtbdlCuuuKEDBqI';
 const CACHE  = new Map();
 const TTL    = 5 * 60 * 1000; // 5 min cache
+const TRUSTED_HOST_SUFFIXES = ['norix.vercel.app', 'norix8.vercel.app', 'localhost', '127.0.0.1'];
+
+function isTrustedHost(url) {
+  try {
+    const host = new URL(url).hostname.toLowerCase();
+    return TRUSTED_HOST_SUFFIXES.some((suffix) => host === suffix || host.endsWith(`.${suffix}`));
+  } catch {
+    return false;
+  }
+}
 
 // ── SW Keep-Alive ─────────────────────────────────────────────
 // Uses chrome.alarms to prevent the service worker from sleeping
@@ -14,6 +24,7 @@ chrome.alarms.onAlarm.addListener(a => { if (a.name === 'pg-keepalive') CACHE.si
 
 // ── Offline Scoring ───────────────────────────────────────────
 function offlineScore(url) {
+  if (isTrustedHost(url)) return 0;
   let s = 0;
   if (!url.startsWith('https://'))   s += 20;
   if (/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/.test(url)) s += 25;
@@ -107,6 +118,12 @@ function notify(id, title, msg, priority = 1, requireInteraction = false) {
 // ── Full Page Scan Flow ───────────────────────────────────────
 async function scanPage(url, tabId) {
   if (!url?.startsWith('http')) return;
+  if (isTrustedHost(url)) {
+    CACHE.set(url, { score: 0, level: 'safe', ts: Date.now() });
+    setBadge(tabId, 0);
+    try { chrome.tabs.sendMessage(tabId, { action: 'RISK_UPDATE', score: 0, level: 'safe', indicators: [] }); } catch(e) {}
+    return;
+  }
 
   // Cache check
   const cached = CACHE.get(url);
