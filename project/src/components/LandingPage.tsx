@@ -7,6 +7,7 @@ import {
   BarChart3, Users, Flag, Brain, Bell, Cpu,
   Sun, Moon, Plus, Minus, Bot, Search, Database, Activity
 } from 'lucide-react';
+import { applyTheme, type Theme } from './UIUpgrades';
 
 // ── Typed colours helper
 function useC(isDark: boolean) {
@@ -365,7 +366,7 @@ function FeatureSectionRow({
 
 // ── Main
 export default function LandingPage({ activeTab = 'landing', navigate, onEnterApp }: { activeTab?: string, navigate?: (v: string) => void, onEnterApp: () => void }) {
-  const [theme, setTheme] = useState<'dark'|'light'>(() => (localStorage.getItem('pg-landing-theme') as any) || 'light');
+  const [theme, setTheme] = useState<Theme>(() => (localStorage.getItem('pg-theme') as Theme) || 'dark');
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [faqOpen, setFaqOpen] = useState<number|null>(null);
@@ -373,7 +374,33 @@ export default function LandingPage({ activeTab = 'landing', navigate, onEnterAp
   const C = useC(isDark);
 
   useEffect(() => { const fn = () => setScrolled(window.scrollY > 30); window.addEventListener('scroll', fn); return () => window.removeEventListener('scroll', fn); }, []);
-  const toggle = () => { const n = isDark ? 'light' : 'dark'; setTheme(n); localStorage.setItem('pg-landing-theme', n); };
+  useEffect(() => {
+    const syncTheme = () => {
+      const root = document.documentElement;
+      if (root.classList.contains('light-mode')) {
+        setTheme('light');
+        return;
+      }
+      if (root.classList.contains('dark-mode')) {
+        setTheme('dark');
+        return;
+      }
+      setTheme((localStorage.getItem('pg-theme') as Theme) || 'dark');
+    };
+    syncTheme();
+    window.addEventListener('storage', syncTheme);
+    window.addEventListener('pg-theme-change', syncTheme as EventListener);
+    return () => {
+      window.removeEventListener('storage', syncTheme);
+      window.removeEventListener('pg-theme-change', syncTheme as EventListener);
+    };
+  }, []);
+
+  const toggle = () => {
+    const n: Theme = isDark ? 'light' : 'dark';
+    setTheme(n);
+    applyTheme(n);
+  };
 
   const navLinks = [['Features','features'],['Extension','extension'],['Pricing','pricing'],['About','about']];
 
@@ -703,14 +730,14 @@ export default function LandingPage({ activeTab = 'landing', navigate, onEnterAp
                   <p className={`mb-3 text-xs uppercase tracking-wider ${isDark ? 'text-blue-300/80' : 'text-blue-700/80'}`}>Pages</p>
                   {['Homepage', 'Universal Scanner', 'Threat Feed', 'Pricing', 'Docs', 'Changelog'].map((l) => (
                     <button key={l} onClick={onEnterApp} className={`mb-2 block text-sm ${isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-black'}`}>{l}</button>
-                  ))}
-                </div>
+                ))}
+              </div>
                 <div>
                   <p className={`mb-3 text-xs uppercase tracking-wider ${isDark ? 'text-blue-300/80' : 'text-blue-700/80'}`}>Connect</p>
                   {['LinkedIn', 'Discord', 'GitHub', 'X / Twitter', 'Support', 'Contact'].map((l) => (
                     <button key={l} onClick={onEnterApp} className={`mb-2 block text-sm ${isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-black'}`}>{l}</button>
-                  ))}
-                </div>
+            ))}
+          </div>
               </section>
 
               <section className={`grid grid-cols-1 border-b lg:col-span-12 lg:grid-cols-12 ${isDark ? 'border-[#2a2a2a]' : 'border-black/15'}`}>

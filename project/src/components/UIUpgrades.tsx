@@ -174,6 +174,8 @@ export function applyTheme(theme: Theme) {
     root.classList.remove('light-mode');
   }
   localStorage.setItem('pg-theme', theme);
+  // Notify same-tab listeners (storage event doesn't fire in same document)
+  window.dispatchEvent(new CustomEvent('pg-theme-change', { detail: theme }));
 }
 
 // ─── Dynamic Background (UI #3) ───────────────────────────────────

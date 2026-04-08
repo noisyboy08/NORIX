@@ -38,7 +38,11 @@ export default function AuthPage({
     };
     syncTheme();
     window.addEventListener('storage', syncTheme);
-    return () => window.removeEventListener('storage', syncTheme);
+    window.addEventListener('pg-theme-change', syncTheme as EventListener);
+    return () => {
+      window.removeEventListener('storage', syncTheme);
+      window.removeEventListener('pg-theme-change', syncTheme as EventListener);
+    };
   }, []);
 
   useEffect(() => {
@@ -321,10 +325,10 @@ export default function AuthPage({
                 {!isLogin && <p className="text-[10px] text-gray-600 mt-2 ml-1">Must be at least 8 characters.</p>}
               </div>
 
-              {error && <p className="text-xs text-red-400">{error}</p>}
-              {info && <p className="text-xs text-emerald-400">{info}</p>}
+              {error && <p className={`text-xs ${isLight ? 'text-red-600' : 'text-red-400'}`}>{error}</p>}
+              {info && <p className={`text-xs ${isLight ? 'text-emerald-600' : 'text-emerald-400'}`}>{info}</p>}
               {!isSupabaseAuthConfigured && (
-                <p className="text-[11px] text-amber-400">
+                <p className={`text-[11px] ${isLight ? 'text-amber-700' : 'text-amber-400'}`}>
                   Supabase auth is not configured. Add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in local `.env` and in your cloud provider environment variables (e.g., Vercel Project Settings).
                 </p>
               )}
@@ -333,7 +337,9 @@ export default function AuthPage({
                 <button 
                   onClick={handleEmailAuth}
                   disabled={loading || oauthLoading !== null}
-                  className="w-full bg-white text-black font-semibold py-3.5 rounded-xl text-sm transition-opacity hover:opacity-90 disabled:opacity-60"
+                  className={`w-full font-semibold py-3.5 rounded-xl text-sm transition-opacity hover:opacity-90 disabled:opacity-60 ${
+                    isLight ? 'bg-gray-900 text-white' : 'bg-white text-black'
+                  }`}
                 >
                   {loading ? 'Please wait...' : isLogin ? 'Log in' : 'Sign Up'}
                 </button>
