@@ -1,7 +1,7 @@
 /**
  * Keeps `extension/manifest.json` version aligned with package.json (Chrome expects semver).
  */
-import { readFileSync, writeFileSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -16,6 +16,12 @@ if (!version || typeof version !== 'string') {
 }
 
 const extManifestPath = path.join(root, 'extension', 'manifest.json');
+if (!existsSync(extManifestPath)) {
+  // In cloud builds, extension assets may be excluded intentionally.
+  console.warn('sync-version: extension/manifest.json not found, skipping extension version sync');
+  process.exit(0);
+}
+
 const ext = JSON.parse(readFileSync(extManifestPath, 'utf8'));
 ext.version = version;
 writeFileSync(extManifestPath, JSON.stringify(ext, null, 2) + '\n');
