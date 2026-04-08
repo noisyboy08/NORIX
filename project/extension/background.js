@@ -296,6 +296,12 @@ chrome.runtime.onMessage.addListener((msg, sender, reply) => {
   if (msg.action === 'CONTENT_FINDINGS') {
     const tabId = sender.tab?.id;
     if (!tabId) return true;
+    if (isTrustedHost(sender.tab?.url || '')) {
+      CACHE.set(sender.tab.url, { score: 0, level: 'safe', ts: Date.now() });
+      setBadge(tabId, 0);
+      try { chrome.tabs.sendMessage(tabId, { action: 'RISK_UPDATE', score: 0, level: 'safe', indicators: [] }); } catch(e) {}
+      return true;
+    }
     const extra = msg.findings.reduce((acc, f) => acc + (f.weight || 0), 0);
     const current = CACHE.get(sender.tab.url)?.score || 0;
     const updated = Math.min(100, current + extra);

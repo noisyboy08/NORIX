@@ -39,6 +39,12 @@ function isTrustedHostUrl(url) {
     return false;
   }
 }
+
+function clearRiskWarningsUi() {
+  document.querySelectorAll('.pg-banner,.pg-field-warning').forEach((el) => el.remove());
+  const panic = document.getElementById('pg-panic-overlay');
+  if (panic) panic.remove();
+}
 const DISPOSABLE_EMAIL_DOMAINS = [
   'mailinator.com','guerrillamail.com','tempmail.com','throwaway.email',
   'fakeinbox.com','sharklasers.com','guerrillamailblock.com','spam4.me',
@@ -684,6 +690,7 @@ chrome.runtime.onMessage.addListener(msg => {
   if (msg.action === 'RISK_UPDATE') {
     currentScore = msg.score;
     injectStyles();
+    if (isTrustedHostUrl(location.href) || msg.score < 40) clearRiskWarningsUi();
 
     // Universal
     createFloatingBadge(msg.score);
@@ -725,6 +732,7 @@ new MutationObserver(() => {
 // DOM ANALYSIS — Send findings to background
 // ════════════════════════════════════════════════════════════════════════
 function domAnalysis() {
+  if (isTrustedHostUrl(location.href)) return;
   const findings = [];
   if (document.querySelectorAll('input[type="password"]').length > 0) findings.push({ rule:'Login Form', weight:20 });
   if (location.protocol !== 'https:') findings.push({ rule:'No HTTPS', weight:30 });
@@ -781,6 +789,7 @@ function routeContextualModules() {
 // ════════════════════════════════════════════════════════════════════════
 function init() {
   injectStyles();
+  if (isTrustedHostUrl(location.href)) clearRiskWarningsUi();
 
   // Read ad blocker setting
   chrome.storage.local.get('set-adblocker', s => {
