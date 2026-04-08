@@ -1,0 +1,313 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;0,14..32,900;1,14..32,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html { scroll-behavior: smooth; }
+
+/* Matches marketing site (LandingPage) when dashboard theme applies */
+html.light-mode body {
+  background-color: #f8f7f4;
+  color: #111827;
+}
+html.dark-mode body {
+  background-color: #0a0a0b;
+  color: #f9fafb;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #0a0a0b;
+  color: #f9fafb;
+  font-family: 'Inter', system-ui, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  /* Mobile: prevent horizontal overflow */
+  overflow-x: hidden;
+  /* Better mobile touch */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+* {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+/* ── PWA Safe Area Support ──────────────────────────────────────────────── */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+}
+
+/* ── Norix app shell (aligned with LandingPage) ─────────────────────────── */
+.serif-display {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.norix-dot-grid {
+  background-size: 24px 24px;
+}
+.norix-dot-grid--dark {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.14) 1px, transparent 1px);
+  opacity: 0.35;
+}
+.norix-dot-grid--light {
+  background-image: radial-gradient(rgba(0, 0, 0, 0.12) 1px, transparent 1px);
+  opacity: 0.45;
+}
+
+@keyframes norix-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.norix-marquee-track {
+  animation: norix-marquee 32s linear infinite;
+  display: flex;
+  width: max-content;
+}
+
+
+
+/* ======== CUSTOM SCROLLBAR ======== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+/* Light Mode Scrollbar Adjustments */
+.light-mode ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+}
+.light-mode ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* ── Dashboard: left nav vs main pane vs quick-links (distinct scroll UX) ── */
+
+/* Sidebar: slim, inset, Norix-blue thumb — reads as “nav rail” not page scroll */
+.norix-scroll-sidebar {
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(59, 130, 246, 0.45) rgba(255, 255, 255, 0.04);
+}
+.light-mode .norix-scroll-sidebar {
+  scrollbar-color: rgba(37, 99, 235, 0.5) rgba(0, 0, 0, 0.06);
+}
+.norix-scroll-sidebar::-webkit-scrollbar {
+  width: 5px;
+}
+.norix-scroll-sidebar::-webkit-scrollbar-track {
+  margin: 8px 0;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 9999px;
+}
+.light-mode .norix-scroll-sidebar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.04);
+}
+.norix-scroll-sidebar::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  background: linear-gradient(180deg, rgba(59, 130, 246, 0.65), rgba(99, 102, 241, 0.4));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.norix-scroll-sidebar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(96, 165, 250, 0.85), rgba(129, 140, 248, 0.55));
+}
+.light-mode .norix-scroll-sidebar::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0.55), rgba(79, 70, 229, 0.4));
+  border-color: rgba(0, 0, 0, 0.06);
+}
+
+/* Main workspace: wider, neutral rail — clearly different from sidebar */
+.norix-scroll-main {
+  scrollbar-gutter: stable;
+  scrollbar-width: auto;
+  scrollbar-color: rgba(100, 116, 139, 0.55) transparent;
+}
+.light-mode .norix-scroll-main {
+  scrollbar-color: rgba(148, 163, 184, 0.85) rgba(0, 0, 0, 0.04);
+}
+.norix-scroll-main::-webkit-scrollbar {
+  width: 10px;
+}
+.norix-scroll-main::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 9999px;
+  margin: 4px 0;
+}
+.light-mode .norix-scroll-main::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.03);
+}
+.norix-scroll-main::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  background: rgba(148, 163, 184, 0.35);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.norix-scroll-main::-webkit-scrollbar-thumb:hover {
+  background: rgba(203, 213, 225, 0.45);
+  background-clip: padding-box;
+}
+.light-mode .norix-scroll-main::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.65);
+}
+.light-mode .norix-scroll-main::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.55);
+}
+
+/* Quick links row: low horizontal bar, indigo tint */
+.norix-scroll-quicklinks {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(99, 102, 241, 0.5) transparent;
+}
+.norix-scroll-quicklinks::-webkit-scrollbar {
+  height: 5px;
+}
+.norix-scroll-quicklinks::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 9999px;
+  margin: 0 12px;
+}
+.light-mode .norix-scroll-quicklinks::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+.norix-scroll-quicklinks::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  background: linear-gradient(90deg, rgba(99, 102, 241, 0.55), rgba(59, 130, 246, 0.45));
+}
+.norix-scroll-quicklinks::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, rgba(129, 140, 248, 0.75), rgba(96, 165, 250, 0.6));
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+.animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.animate-spin { animation: spin 0.8s linear infinite; }
+
+@keyframes breathe-red {
+  0%, 100% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.15); filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.4)); }
+  50% { box-shadow: 0 0 40px rgba(239, 68, 68, 0.35); filter: drop-shadow(0 0 20px rgba(239, 68, 68, 0.7)); }
+}
+.risk-critical-glow {
+  animation: breathe-red 3s infinite;
+  border-color: rgba(239, 68, 68, 0.5) !important;
+}
+
+@keyframes slide-in {
+  from { opacity: 0; transform: translateX(100%); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.animate-slide-in { animation: slide-in 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+
+@keyframes count-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-count { animation: count-up 0.5s ease-out; }
+
+/* ======== LIGHT MODE GLOBAL OVERRIDES ======== */
+.light-mode body {
+  background-color: #f1f5f9 !important;
+}
+
+/* Automatically fix dark components when light theme is active */
+.light-mode [class*="bg-slate-800"],
+.light-mode [class*="bg-slate-900"],
+.light-mode [class*="bg-slate-700"],
+.light-mode [class*="from-slate-900"],
+.light-mode [class*="from-slate-800"] {
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1) !important;
+}
+
+.light-mode [class*="bg-black"],
+.light-mode [class*="bg-[#0a0a0a]"],
+.light-mode [class*="bg-neutral-950"] {
+  background-color: #ffffff !important;
+  background-image: none !important;
+}
+
+.light-mode [class*="bg-slate-900/70"],
+.light-mode [class*="bg-slate-800/60"],
+.light-mode [class*="bg-slate-800/50"] {
+  background-color: #f8fafc !important;
+  background-image: none !important;
+}
+
+.light-mode [class*="text-white"]:not([class*="bg-blue"]):not([class*="bg-red"]):not([class*="bg-orange"]):not([class*="bg-emerald"]):not([class*="bg-indigo"]):not([class*="bg-gradient"]):not([class*="bg-pink"]):not([class*="bg-violet"]):not([class*="bg-purple"]):not([class*="text-blue"]):not([class*="text-red"]):not([class*="text-emerald"]),
+.light-mode [class*="text-slate-100"]:not([class*="bg-blue"]):not([class*="bg-gradient"]),
+.light-mode [class*="text-slate-200"]:not([class*="bg-gradient"]),
+.light-mode [class*="text-slate-300"]:not([class*="bg-gradient"]) {
+  color: #0f172a !important;
+}
+
+.light-mode [class*="text-slate-400"],
+.light-mode [class*="text-slate-500"] {
+  color: #475569 !important;
+}
+
+.light-mode [class*="border-slate-700"],
+.light-mode [class*="border-slate-600"],
+.light-mode [class*="border-white/10"] {
+  border-color: #e2e8f0 !important;
+}
+
+/* Fix Hero Banner gradient */
+.light-mode .bg-gradient-to-r.from-\[\#0a0a0a\] {
+  background: linear-gradient(to right, #ffffff, #f0f4ff, #ffffff) !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.05) !important;
+}
+
+/* Fix inputs being unreadable when background is overridden */
+.light-mode input, .light-mode textarea, .light-mode select {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+.light-mode input::placeholder, .light-mode textarea::placeholder {
+  color: #64748b !important;
+}
+
+.light-mode .text-red-400 { color: #dc2626 !important; }
+.light-mode .text-emerald-400 { color: #16a34a !important; }
+.light-mode .text-blue-400 { color: #2563eb !important; }
+.light-mode .text-yellow-400 { color: #ca8a04 !important; }
+.light-mode .text-orange-400 { color: #ea580c !important; }
+.light-mode .text-purple-400 { color: #9333ea !important; }
+
+/* Fix Risk Color Backgrounds in Light Mode (replaces muddy dark overlays) */
+.light-mode [class*="bg-emerald-950"] { background-color: #ecfdf5 !important; border-color: #a7f3d0 !important; }
+.light-mode [class*="bg-blue-950"] { background-color: #eff6ff !important; border-color: #bfdbfe !important; }
+.light-mode [class*="bg-yellow-950"] { background-color: #fefce8 !important; border-color: #fef08a !important; }
+.light-mode [class*="bg-orange-950"] { background-color: #fff7ed !important; border-color: #fed7aa !important; }
+.light-mode [class*="bg-red-950"] { background-color: #fef2f2 !important; border-color: #fecaca !important; }
+.light-mode [class*="bg-red-900"] { background-color: #fee2e2 !important; border-color: #fca5a5 !important; color: #b91c1c !important;}
+
+/* Fix Text in nested risk cards */
+.light-mode [class*="text-blue-300"] { color: #1d4ed8 !important; }
+.light-mode [class*="text-red-300"] { color: #b91c1c !important; }
+.light-mode [class*="text-emerald-300"] { color: #15803d !important; }
+.light-mode [class*="text-slate-200"] { color: #1e293b !important; }
+.light-mode [class*="text-slate-300"] { color: #334155 !important; }

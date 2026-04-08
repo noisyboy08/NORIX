@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Norix</title>
+  <link rel="stylesheet" href="popup.css">
+  <style>
+    /* ═══════════════════════════════════════════════════════════════
+       NORIX v3.0 — REDESIGNED EXTENSION POPUP
+       Premium dark glassmorphism design
+    ═══════════════════════════════════════════════════════════════ */
+
+    :root {
+      --bg: #030712;
+      --bg-card: #0d1117;
+      --bg-card2: #0f1929;
+      --bg-hover: #161b22;
+      --border: rgba(255,255,255,0.08);
+      --border-bright: rgba(255,255,255,0.15);
+      --text-primary: #f0f6fc;
+      --text-secondary: #8b949e;
+      --text-muted: #484f58;
+      --blue: #2563eb;
+      --blue-glow: rgba(37,99,235,0.3);
+      --emerald: #10b981;
+      --red: #ef4444;
+      --orange: #f59e0b;
+      --purple: #8b5cf6;
+      --gauge-track: #1e293b;
+    }
+
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-card2: #f1f5f9;
+      --bg-hover: #f1f5f9;
+      --border: rgba(0,0,0,0.08);
+      --border-bright: rgba(0,0,0,0.15);
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --gauge-track: #e2e8f0;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      width: 360px;
+      min-height: 500px;
+      max-height: 620px;
+      overflow-x: hidden;
+    }
+
+    #app {
+      display: flex;
+      flex-direction: column;
+      min-height: 500px;
+    }
+
+    /* ── Header ─────────────────────────────────────────────────── */
+    #pg-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-card2) 100%);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #pg-header::before {
+      content: '';
+      position: absolute;
+      top: -20px; right: -20px;
+      width: 80px; height: 80px;
+      background: radial-gradient(circle, rgba(37,99,235,0.3) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .logo-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .shield-icon {
+      width: 34px; height: 34px;
+      background: linear-gradient(135deg, #1d4ed8, #4f46e5);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px rgba(37,99,235,0.4);
+      flex-shrink: 0;
+    }
+
+    .logo-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+
+    .logo-title em {
+      font-style: normal;
+      background: linear-gradient(135deg, #60a5fa, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .logo-badge {
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .status-dot {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(16,185,129,0.1);
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 20px;
+      padding: 3px 8px;
+    }
+
+    .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--emerald);
+      animation: pulse-dot 2s infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(0.85); }
+    }
+
+    .status-text {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--emerald);
+    }
+
+    .icon-btn {
+      width: 28px; height: 28px;
+      background: var(--bg-hover);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .icon-btn:hover {
+      background: var(--border);
+      color: var(--text-primary);
+    }
+
+    /* ── Site Bar ────────────────────────────────────────────────── */
+    #site-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .site-favicon {
+      width: 28px; height: 28px;
+      background: var(--bg-hover);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .site-host {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-primary);
+      max-width: 200px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .site-sub {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .site-score-mini {
+      margin-left: auto;
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+    }
+
+    /* ── Tab Bar ─────────────────────────────────────────────────── */
+    #tab-bar {
+      display: flex;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+      padding: 0 10px;
+      gap: 2px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    #tab-bar::-webkit-scrollbar { display: none; }
+
+    .tab {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 9px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .tab:hover { color: var(--text-secondary); }
+    .tab.active { color: #60a5fa; border-bottom-color: #2563eb; }
+
+    /* ── Panels ──────────────────────────────────────────────────── */
+    .panel {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .panel.hidden { display: none !important; }
+
+    /* ── Gauge Card ──────────────────────────────────────────────── */
+    .gauge-card {
+      background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-card2) 100%);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.5s;
+    }
+
+    .gauge-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, #2563eb, #4f46e5, #7c3aed);
+      opacity: 0.8;
+    }
+
+    .gauge-card[data-risk="safe"]    { border-color: rgba(16,185,129,0.3); }
+    .gauge-card[data-risk="low"]     { border-color: rgba(59,130,246,0.3); }
+    .gauge-card[data-risk="medium"]  { border-color: rgba(245,158,11,0.3); }
+    .gauge-card[data-risk="high"]    { border-color: rgba(239,68,68,0.3); }
+    .gauge-card[data-risk="critical"] { border-color: rgba(239,68,68,0.6); animation: critical-pulse 2s infinite; }
+
+    @keyframes critical-pulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); }
+      50% { box-shadow: 0 0 20px 4px rgba(239,68,68,0.2); }
+    }
+
+    .gauge-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 8px;
+    }
+
+    .gauge-svg { width: 160px; height: 92px; }
+
+    .risk-info { text-align: center; }
+
+    .verdict {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 3px;
+    }
+
+    .verdict-sub {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    /* ── Scan Steps ──────────────────────────────────────────────── */
+    .scan-steps {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .step-dot {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: var(--bg-hover);
+      border: 2px solid var(--border);
+      transition: all 0.3s;
+    }
+
+    .step.done .step-dot { background: var(--emerald); border-color: var(--emerald); }
+    .step.active .step-dot { background: var(--blue); border-color: var(--blue); animation: spin-dot 1s linear infinite; }
+    .step.error .step-dot { background: var(--red); border-color: var(--red); }
+
+    @keyframes spin-dot {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .step-label { font-size: 9px; font-weight: 600; color: var(--text-muted); text-align: center; }
+    .step-val   { font-size: 10px; font-weight: 700; color: var(--text-primary); text-align: center; }
+    .step-line  { width: 20px; height: 1px; background: var(--border); flex-shrink: 0; margin-top: -18px; }
+    .step-line.done { background: var(--emerald); }
+
+    /* ── Meta Grid ───────────────────────────────────────────────── */
+    .meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    .meta-cell {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 10px;
+    }
+
+    .meta-label { font-size: 9px; font-weight: 600; color: var(--text-muted); display: block; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 2px; }
+    .meta-val   { font-size: 12px; font-weight: 700; color: var(--text-primary); }
+
+    /* ── Chip Row ────────────────────────────────────────────────── */
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .chip {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 4px 9px;
+      border-radius: 20px;
+      border: 1px solid transparent;
+    }
+
+    .chip-safe    { background: rgba(16,185,129,0.1); color: var(--emerald); border-color: rgba(16,185,129,0.2); }
+    .chip-warn    { background: rgba(245,158,11,0.1); color: #f59e0b; border-color: rgba(245,158,11,0.2); }
+    .chip-danger  { background: rgba(239,68,68,0.1); color: var(--red); border-color: rgba(239,68,68,0.2); }
+    .chip-info    { background: rgba(59,130,246,0.1); color: #60a5fa; border-color: rgba(59,130,246,0.2); }
+
+    /* ── Indicators ──────────────────────────────────────────────── */
+    .indicators { display: flex; flex-direction: column; gap: 5px; }
+
+    .indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      padding: 6px 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .ind-icon { font-size: 13px; flex-shrink: 0; }
+    .ind-label { flex: 1; color: var(--text-secondary); }
+    .ind-val { font-weight: 700; color: var(--text-primary); }
+
+    /* ── Quick Actions ───────────────────────────────────────────── */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 6px;
+    }
+
+    .qa-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 4px;
+      color: var(--text-secondary);
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .qa-btn:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+      border-color: var(--border-bright);
+    }
+
+    /* ── Scan Tab ────────────────────────────────────────────────── */
+    .scan-types {
+      display: flex;
+      gap: 4px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 4px;
+    }
+
+    .stype {
+      flex: 1;
+      padding: 7px 4px;
+      font-size: 10px;
+      font-weight: 600;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      color: var(--text-muted);
+      background: none;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .stype.active {
+      background: #1d4ed8;
+      color: #fff;
+      box-shadow: 0 0 10px rgba(29,78,216,0.3);
+    }
+
+    .scan-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    textarea {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      padding: 10px 12px;
+      resize: none;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    textarea:focus { border-color: #2563eb; }
+    textarea::placeholder { color: var(--text-muted); }
+
+    .scan-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      flex: 1;
+      background: linear-gradient(135deg, #1d4ed8, #4338ca);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 0 15px rgba(37,99,235,0.3);
+    }
+
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 0 25px rgba(37,99,235,0.5); }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-primary.full { width: 100%; }
+
+    .btn-ghost {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text-secondary);
+      padding: 10px 14px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-ghost:hover { background: var(--bg-hover); color: var(--text-primary); border-color: var(--border-bright); }
+    .btn-ghost.full { width: 100%; }
+    .btn-ghost.small { font-size: 10px; padding: 6px 10px; }
+
+    .btn-xs {
+      background: var(--bg-hover);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      color: var(--text-secondary);
+      padding: 5px 9px;
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* ── Result Card ─────────────────────────────────────────────── */
+    .result-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 12px;
+    }
+
+    .result-card.hidden { display: none !important; }
+
+    /* ── OTP Panel ───────────────────────────────────────────────── */
+    .otp-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .otp-icon {
+      width: 36px; height: 36px;
+      background: rgba(37,99,235,0.15);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .otp-title { font-size: 13px; font-weight: 700; color: var(--text-primary); }
+    .otp-sub   { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+
+    .otp-tips {
+      background: linear-gradient(135deg, rgba(37,99,235,0.08), rgba(79,70,229,0.08));
+      border: 1px solid rgba(37,99,235,0.2);
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 4px;
+    }
+
+    .tips-title { font-size: 11px; font-weight: 700; color: #60a5fa; margin-bottom: 6px; }
+    .tips-list  { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+    .tips-list li { font-size: 10px; color: var(--text-secondary); padding-left: 14px; position: relative; }
+    .tips-list li::before { content: '→'; position: absolute; left: 0; color: #60a5fa; font-weight: bold; }
+
+    /* ── History ─────────────────────────────────────────────────── */
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .history-title { font-size: 13px; font-weight: 700; color: var(--text-primary); }
+    .history-sub   { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+
+    .hist-stats {
+      display: flex;
+      gap: 6px;
+    }
+
+    .hs-cell {
+      flex: 1;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px;
+      text-align: center;
+    }
+
+    .hs-n { display: block; font-size: 20px; font-weight: 900; color: var(--text-primary); }
+    .hs-l { font-size: 9px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
+    .threat-num { color: var(--red) !important; }
+    .safe-num { color: var(--emerald) !important; }
+
+    .history-list { display: flex; flex-direction: column; gap: 4px; max-height: 260px; overflow-y: auto; }
+
+    .hist-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 11px;
+    }
+
+    .hist-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .hist-host { flex: 1; font-weight: 600; color: var(--text-primary); truncate: true; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .hist-score { font-size: 12px; font-weight: 900; flex-shrink: 0; }
+
+    /* ── Report ──────────────────────────────────────────────────── */
+    .report-header { display: flex; align-items: center; gap: 10px; }
+    .report-icon { font-size: 24px; }
+    .report-title { font-size: 13px; font-weight: 700; color: var(--text-primary); }
+    .report-sub   { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+
+    .field-group { display: flex; flex-direction: column; gap: 5px; }
+    .field-group label { font-size: 10px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; }
+
+    .field-group select,
+    .field-group input {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      padding: 8px 10px;
+      outline: none;
+      width: 100%;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+    }
+
+    .field-group select:focus,
+    .field-group input:focus { border-color: #2563eb; }
+
+    .rpt-msg { padding: 10px 12px; border-radius: 10px; font-size: 11px; font-weight: 600; margin-top: 4px; }
+    .rpt-msg.success { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.2); color: var(--emerald); }
+    .rpt-msg.error   { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: var(--red); }
+    .label-opt { color: var(--text-muted); font-weight: 400; }
+
+    /* ── Settings ────────────────────────────────────────────────── */
+    .settings-section-label {
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 4px;
+    }
+
+    .setting-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      gap: 8px;
+    }
+
+    .setting-info { flex: 1; }
+    .setting-label { font-size: 12px; font-weight: 600; color: var(--text-primary); }
+    .setting-desc  { font-size: 10px; color: var(--text-muted); margin-top: 1px; }
+
+    /* Toggle Switch */
+    .toggle { position: relative; display: inline-block; width: 36px; height: 20px; flex-shrink: 0; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; inset: 0; background: var(--bg-hover); border: 1px solid var(--border); border-radius: 20px; transition: 0.3s; }
+    .slider::before { content: ''; position: absolute; height: 14px; width: 14px; left: 2px; bottom: 2px; background: var(--text-muted); border-radius: 50%; transition: 0.3s; }
+    .toggle input:checked + .slider { background: #1d4ed8; border-color: #2563eb; }
+    .toggle input:checked + .slider::before { transform: translateX(16px); background: #fff; }
+
+    /* Threshold */
+    .threshold-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; gap: 10px; }
+    .threshold-slider-wrap { display: flex; align-items: center; gap: 8px; flex: 1; justify-content: flex-end; }
+    .threshold-slider { width: 90px; -webkit-appearance: none; height: 4px; background: var(--border); border-radius: 2px; cursor: pointer; }
+    .threshold-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; background: #2563eb; border-radius: 50%; box-shadow: 0 0 8px rgba(37,99,235,0.5); }
+    .threshold-val { font-size: 12px; font-weight: 800; color: #60a5fa; min-width: 24px; text-align: right; }
+
+    .settings-divider { height: 1px; background: var(--border); margin: 4px 0; }
+    .settings-ver { font-size: 9px; color: var(--text-muted); text-align: center; margin-top: 4px; }
+    .settings-links { display: flex; flex-direction: column; gap: 5px; }
+
+    /* ── Footer ──────────────────────────────────────────────────── */
+    .ext-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 14px;
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      gap: 6px;
+      margin-top: auto;
+    }
+
+    .footer-divider { color: var(--border); }
+
+    /* ── Utility ─────────────────────────────────────────────────── */
+    .hidden { display: none !important; }
+
+    /* ── Scrollbar ───────────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    /* ── Misc panels ─────────────────────────────────────────────── */
+    .report-icon { font-size: 24px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: rgba(239,68,68,0.1); border-radius: 10px; border: 1px solid rgba(239,68,68,0.2); }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <div class="norix-popup-strip" aria-hidden="true">
+    <div class="norix-popup-strip-inner">
+      <span>🛡️ Norix — same look as the website</span>
+      <span>🔐 Offline-first · optional cloud AI</span>
+      <span>🚀 Real-time page &amp; link analysis</span>
+      <span>🛡️ Norix — same look as the website</span>
+      <span>🔐 Offline-first · optional cloud AI</span>
+      <span>🚀 Real-time page &amp; link analysis</span>
+    </div>
+  </div>
+
+  <!-- ── Header ── -->
+  <header id="pg-header">
+    <div class="logo-group">
+      <div class="shield-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="logo-title">Norix</div>
+        <div class="serif-accent">Browser protection</div>
+        <div class="logo-badge">v3.0 · Cognitive defense</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div class="status-dot" id="hdr-status">
+        <span class="dot"></span>
+        <span class="status-text">Active</span>
+      </div>
+      <button class="icon-btn" id="theme-toggle" title="Toggle theme">☀</button>
+    </div>
+  </header>
+
+  <!-- ── Current Site Bar ── -->
+  <div class="site-bar" id="site-bar">
+    <div class="site-favicon" id="site-favicon">🌐</div>
+    <div class="site-info">
+      <div class="site-host" id="pg-hostname">Loading...</div>
+      <div class="site-sub" id="pg-hostsub">Analyzing current page</div>
+    </div>
+    <div class="site-score-mini" id="site-score-mini">–</div>
+  </div>
+
+  <!-- ── Tab Bar ── -->
+  <nav id="tab-bar">
+    <button class="tab active" data-tab="page" title="Page Analysis">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      Page
+    </button>
+    <button class="tab" data-tab="scan" title="Universal Scan">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      Scan
+    </button>
+    <button class="tab" data-tab="otp" title="OTP/SMS Check">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      OTP
+    </button>
+    <button class="tab" data-tab="history" title="History Scan">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      History
+    </button>
+    <button class="tab" data-tab="report" title="Report Threat">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+      Report
+    </button>
+    <button class="tab" data-tab="settings" title="Settings">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 1.41 1.41C22 8 22 10 22 12s0 4-1.52 5.66A10 10 0 0 1 19 19C17 21 15 22 12 22s-5-1-7-3A10 10 0 0 1 3 17C1 15 2 13 2 12s-1-4 1.52-5.66A10 10 0 0 1 4.93 5C7 3 9 2 12 2s5 1 7.07 2.93z"/></svg>
+      Suite
+    </button>
+  </nav>
+
+  <!-- ══════ PAGE TAB ══════ -->
+  <section class="panel active" id="panel-page">
+    <!-- Gauge Card -->
+    <div class="gauge-card" id="pg-risk-card" data-risk="loading">
+      <div class="gauge-wrap">
+        <svg class="gauge-svg" viewBox="0 0 200 115">
+          <!-- Track -->
+          <path d="M 25 100 A 75 75 0 0 1 175 100" fill="none" stroke="var(--gauge-track)" stroke-width="14" stroke-linecap="round"/>
+          <!-- Colored zones -->
+          <path d="M 25 100 A 75 75 0 0 1 62 38"  fill="none" stroke="#10b981" stroke-width="8" stroke-linecap="round" opacity="0.4"/>
+          <path d="M 62 38 A 75 75 0 0 1 100 25"  fill="none" stroke="#3b82f6" stroke-width="8" stroke-linecap="round" opacity="0.4"/>
+          <path d="M 100 25 A 75 75 0 0 1 138 38" fill="none" stroke="#facc15" stroke-width="8" stroke-linecap="round" opacity="0.4"/>
+          <path d="M 138 38 A 75 75 0 0 1 175 100" fill="none" stroke="#ef4444" stroke-width="8" stroke-linecap="round" opacity="0.4"/>
+          <!-- Needle arc (filled by JS) -->
+          <path id="gauge-needle" d="M 25 100 A 75 75 0 0 1 25 100" fill="none" stroke="#10b981" stroke-width="10" stroke-linecap="round" style="transition:all 1s cubic-bezier(.34,1.56,.64,1)"/>
+          <!-- Center dot -->
+          <circle cx="100" cy="100" r="8" fill="var(--bg-card)" stroke="var(--border)" stroke-width="2"/>
+          <!-- Score text -->
+          <text id="gauge-score" x="100" y="84" text-anchor="middle" fill="var(--text-primary)" font-size="28" font-weight="900" font-family="Inter,sans-serif">–</text>
+          <text x="100" y="97" text-anchor="middle" fill="var(--text-muted)" font-size="9" font-family="Inter,sans-serif">/ 100</text>
+          <!-- Labels -->
+          <text x="18" y="114" fill="#10b981" font-size="8" font-weight="700" font-family="Inter">SAFE</text>
+          <text x="174" y="114" fill="#ef4444" font-size="8" font-weight="700" font-family="Inter" text-anchor="end">RISK</text>
+        </svg>
+      </div>
+      <div class="risk-info">
+        <div id="pg-verdict" class="verdict">Analyzing…</div>
+        <div id="pg-sub" class="verdict-sub">Running AI engine</div>
+      </div>
+    </div>
+
+    <!-- Scan Steps Progress -->
+    <div class="scan-steps" id="scan-steps">
+      <div class="step" id="step-ml">
+        <div class="step-dot"></div>
+        <span class="step-label">Local ML</span>
+        <span class="step-val" id="sv-ml">–</span>
+      </div>
+      <div class="step-line" id="sl-1"></div>
+      <div class="step" id="step-rdap">
+        <div class="step-dot"></div>
+        <span class="step-label">Domain Age</span>
+        <span class="step-val" id="sv-rdap">–</span>
+      </div>
+      <div class="step-line" id="sl-2"></div>
+      <div class="step" id="step-geo">
+        <div class="step-dot"></div>
+        <span class="step-label">Geo IP</span>
+        <span class="step-val" id="sv-geo">–</span>
+      </div>
+      <div class="step-line" id="sl-3"></div>
+      <div class="step" id="step-cloud">
+        <div class="step-dot"></div>
+        <span class="step-label">Cloud AI</span>
+        <span class="step-val" id="sv-cloud">–</span>
+      </div>
+    </div>
+
+    <!-- Meta Grid -->
+    <div id="pg-meta" class="meta-grid hidden">
+      <div class="meta-cell"><span class="meta-label">Domain Age</span><span class="meta-val" id="mv-age">–</span></div>
+      <div class="meta-cell"><span class="meta-label">Hosted In</span><span class="meta-val" id="mv-country">–</span></div>
+      <div class="meta-cell"><span class="meta-label">SSL/HTTPS</span><span class="meta-val" id="mv-ssl">–</span></div>
+      <div class="meta-cell"><span class="meta-label">Brand Match</span><span class="meta-val" id="mv-brand">–</span></div>
+    </div>
+
+    <!-- Chips -->
+    <div id="pg-chips" class="chip-row"></div>
+
+    <!-- Indicators -->
+    <div id="pg-indicators" class="indicators"></div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions" id="quick-actions">
+      <button class="qa-btn" id="qa-copy">📋 Copy URL</button>
+      <button class="qa-btn" id="qa-report">🚩 Report</button>
+      <button class="qa-btn" id="qa-full">🔍 Full Scan</button>
+    </div>
+  </section>
+
+  <!-- ══════ SCAN TAB ══════ -->
+  <section class="panel hidden" id="panel-scan">
+    <div class="scan-types">
+      <button class="stype active" data-type="url">🔗 URL</button>
+      <button class="stype" data-type="email">✉️ Email</button>
+      <button class="stype" data-type="message">💬 SMS/WA</button>
+      <button class="stype" data-type="phone">📞 Phone</button>
+    </div>
+    <p id="scan-hint" class="scan-hint">Paste any URL or domain to analyze for phishing.</p>
+    <textarea id="scan-input" rows="4" placeholder="https://suspicious-site.com..."></textarea>
+    <div class="scan-actions">
+      <button id="scan-demo-btn" class="btn-ghost">Try Demo</button>
+      <button id="scan-paste-btn" class="btn-ghost">📋 Paste</button>
+      <button id="scan-go-btn" class="btn-primary">⚡ Scan Now</button>
+    </div>
+    <div id="scan-result" class="result-card hidden"></div>
+  </section>
+
+  <!-- ══════ OTP/SMS TAB ══════ -->
+  <section class="panel hidden" id="panel-otp">
+    <div class="otp-header">
+      <div class="otp-icon">🔐</div>
+      <div>
+        <p class="otp-title">OTP &amp; SMS Scam Detector</p>
+        <p class="otp-sub">Paste any suspicious SMS, call, or OTP message</p>
+      </div>
+    </div>
+    <textarea id="otp-input" rows="5" placeholder="Paste the suspicious message here…&#10;Example: SBI ALERT: Your A/C blocked. Share OTP 7841 to unblock. Call 9876543210 NOW"></textarea>
+    <div class="scan-actions">
+      <button id="otp-demo-btn" class="btn-ghost">Try Demo</button>
+      <button id="otp-go-btn" class="btn-primary">🔍 Analyze</button>
+    </div>
+    <div id="otp-result" class="result-card hidden"></div>
+    <div class="otp-tips">
+      <p class="tips-title">🛡️ Golden Rules</p>
+      <ul class="tips-list">
+        <li>Banks <strong>NEVER</strong> ask you to share OTPs</li>
+        <li>RBI does not call or send SMS asking for info</li>
+        <li>Any prize you didn't enter is always a scam</li>
+        <li>Call 1930 to report cybercrime in India</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ══════ HISTORY TAB ══════ -->
+  <section class="panel hidden" id="panel-history">
+    <div class="history-header">
+      <div>
+        <p class="history-title">Browse History Scan</p>
+        <p class="history-sub" id="hist-summary">Checking recent pages for threats…</p>
+      </div>
+      <button id="history-rescan" class="btn-xs">↻ Rescan</button>
+    </div>
+    <div class="hist-stats" id="hist-stats">
+      <div class="hs-cell" id="hs-total"><span class="hs-n">–</span><span class="hs-l">Scanned</span></div>
+      <div class="hs-cell" id="hs-threats"><span class="hs-n threat-num">–</span><span class="hs-l">Threats</span></div>
+      <div class="hs-cell" id="hs-safe"><span class="hs-n safe-num">–</span><span class="hs-l">Safe</span></div>
+    </div>
+    <div id="history-list" class="history-list"></div>
+  </section>
+
+  <!-- ══════ REPORT TAB ══════ -->
+  <section class="panel hidden" id="panel-report">
+    <div class="report-header">
+      <div class="report-icon">🚩</div>
+      <div>
+        <p class="report-title">Report a Threat</p>
+        <p class="report-sub">Help protect the community</p>
+      </div>
+    </div>
+    <div class="field-group">
+      <label>Type</label>
+      <select id="rpt-type">
+        <option value="url">🔗 Website / URL</option>
+        <option value="email">✉️ Email</option>
+        <option value="message">💬 SMS / WhatsApp</option>
+        <option value="phone">📞 Phone Number</option>
+      </select>
+    </div>
+    <div class="field-group">
+      <label>URL / Content</label>
+      <input id="rpt-content" type="text" placeholder="https://suspicious.com or paste message..."/>
+    </div>
+    <div class="field-group">
+      <label>Category</label>
+      <select id="rpt-category">
+        <option>phishing</option>
+        <option>otp_scam</option>
+        <option>banking_fraud</option>
+        <option>kyc_fraud</option>
+        <option>lottery_scam</option>
+        <option>crypto_scam</option>
+        <option>job_scam</option>
+        <option>impersonation</option>
+        <option>vishing</option>
+      </select>
+    </div>
+    <div class="field-group">
+      <label>Description <span class="label-opt">(optional)</span></label>
+      <textarea id="rpt-desc" rows="2" placeholder="What is this threat doing?"></textarea>
+    </div>
+    <button id="rpt-submit" class="btn-primary full">🚩 Submit Report</button>
+    <div id="rpt-msg" class="rpt-msg hidden"></div>
+  </section>
+
+  <!-- ══════ SETTINGS/SUITE TAB ══════ -->
+  <section class="panel hidden" id="panel-settings">
+    <p class="settings-section-label">Detection</p>
+    <div class="setting-row">
+      <div class="setting-info"><p class="setting-label">Auto-scan pages</p><p class="setting-desc">Scan every page you visit</p></div>
+      <label class="toggle"><input id="set-auto" type="checkbox" checked><span class="slider"></span></label>
+    </div>
+    <div class="setting-row">
+      <div class="setting-info"><p class="setting-label">Threat notifications</p><p class="setting-desc">Alerts for high-risk pages (≥60)</p></div>
+      <label class="toggle"><input id="set-notif" type="checkbox" checked><span class="slider"></span></label>
+    </div>
+    <div class="setting-row">
+      <div class="setting-info"><p class="setting-label">Offline ML mode</p><p class="setting-desc">Local AI — no internet needed</p></div>
+      <label class="toggle"><input id="set-ml" type="checkbox" checked><span class="slider"></span></label>
+    </div>
+    <div class="setting-row">
+      <div class="setting-info"><p class="setting-label">Link highlighting</p><p class="setting-desc">Highlight suspicious links on pages</p></div>
+      <label class="toggle"><input id="set-links" type="checkbox" checked><span class="slider"></span></label>
+    </div>
+    <div class="setting-row">
+      <div class="setting-info"><p class="setting-label">Clipboard scan</p><p class="setting-desc">Warn if copied text looks like a scam</p></div>
+      <label class="toggle"><input id="set-clip" type="checkbox" checked><span class="slider"></span></label>
+    </div>
+    <div class="setting-row">
+      <div class="setting-info"><p class="setting-label">🚫 Ad Blocker</p><p class="setting-desc">Block 80+ ad networks</p></div>
+      <label class="toggle"><input id="set-adblocker" type="checkbox" checked><span class="slider"></span></label>
+    </div>
+
+    <p class="settings-section-label" style="margin-top:8px">Risk Threshold</p>
+    <div class="threshold-row">
+      <label class="setting-label">Notify when score ≥</label>
+      <div class="threshold-slider-wrap">
+        <input type="range" id="set-threshold" min="20" max="90" step="10" value="60" class="threshold-slider">
+        <span id="threshold-val" class="threshold-val">60</span>
+      </div>
+    </div>
+
+    <div class="settings-divider"></div>
+
+    <p class="settings-section-label">Quick Launch</p>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+      <button id="nav-email" class="btn-ghost small">✉️ Email Intel</button>
+      <button id="nav-phone" class="btn-ghost small">📞 Phone Scan</button>
+      <button id="nav-voice" class="btn-ghost small">🎙️ Voice Scan</button>
+      <button id="nav-sandbox" class="btn-ghost small">🔗 Sandbox ↗</button>
+    </div>
+
+    <div class="settings-divider"></div>
+    <div class="settings-links">
+      <button id="open-dashboard" class="btn-primary full">📊 Open Full Dashboard ↗</button>
+      <button id="open-training" class="btn-ghost full" style="margin-top:6px">🎮 Take Phishing Quiz</button>
+    </div>
+    <p class="settings-ver">Norix v3.0 · Cognitive Defense · SDG 9 &amp; 16</p>
+  </section>
+
+  <!-- ══════ NATIVE SUITE PANELS ══════ -->
+
+  <!-- Voice Scan Panel -->
+  <section class="panel hidden" id="panel-voice-scan">
+    <div class="otp-header">
+      <div class="otp-icon" style="background:rgba(219,39,119,0.15)">🎙️</div>
+      <div><p class="otp-title">Voice Scam Scan</p><p class="otp-sub">Analyze call transcripts</p></div>
+    </div>
+    <textarea id="voice-input" rows="5" placeholder="Paste the suspicious phone call transcript here..."></textarea>
+    <div class="scan-actions">
+      <button id="voice-back-btn" class="btn-ghost">← Back</button>
+      <button id="voice-go-btn" class="btn-primary" style="background:linear-gradient(135deg,#be185d,#7c3aed)">🔍 Analyze Audio Text</button>
+    </div>
+    <div id="voice-result" class="result-card hidden" style="margin-top:10px"></div>
+  </section>
+
+  <!-- Phone TrueScan Panel -->
+  <section class="panel hidden" id="panel-phone-scan">
+    <div class="otp-header">
+      <div class="otp-icon" style="background:rgba(234,88,12,0.15)">📞</div>
+      <div><p class="otp-title">Phone TrueScan</p><p class="otp-sub">Identify carrier, country &amp; scam reports</p></div>
+    </div>
+    <input type="text" id="phone-in" placeholder="+91 9876543210" style="width:100%;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:10px 12px;color:var(--text-primary);font-size:12px;outline:none;font-family:Inter,sans-serif">
+    <div class="scan-actions">
+      <button id="phone-back-btn" class="btn-ghost">← Back</button>
+      <button id="phone-go-btn" class="btn-primary" style="background:linear-gradient(135deg,#ea580c,#b45309)">🔍 Inspect Number</button>
+    </div>
+    <div id="phone-result" class="result-card hidden" style="margin-top:10px;text-align:left">
+      <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:6px;margin-bottom:6px">
+        <span style="font-size:10px;color:var(--text-muted)">Identity:</span>
+        <span id="pr-type" style="font-size:11px;font-weight:bold;color:var(--text-primary)"></span>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+        <span style="font-size:10px;color:var(--text-muted)">Carrier:</span><span id="pr-carrier" style="font-size:10px;font-weight:bold;color:var(--text-primary)"></span>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+        <span style="font-size:10px;color:var(--text-muted)">Location:</span><span id="pr-geo" style="font-size:10px;font-weight:bold;color:var(--text-primary)"></span>
+      </div>
+      <div style="display:flex;justify-content:space-between;">
+        <span style="font-size:10px;color:var(--text-muted)">Reports:</span><span id="pr-reports" style="font-size:10px;font-weight:bold;color:var(--text-primary)"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Email Intel Panel -->
+  <section class="panel hidden" id="panel-email-intel">
+    <div class="otp-header">
+      <div class="otp-icon" style="background:rgba(37,99,235,0.15)">✉️</div>
+      <div><p class="otp-title">Email Intelligence</p><p class="otp-sub">Typosquatting &amp; Sender Trust</p></div>
+    </div>
+    <textarea id="email-in" rows="4" placeholder="Paste full email format here... ex: &#10;From: PayPal Support &lt;support@paypaI.com&gt;"></textarea>
+    <div class="scan-actions">
+      <button id="email-back-btn" class="btn-ghost">← Back</button>
+      <button id="email-go-btn" class="btn-primary">✉️ Verify Sender</button>
+    </div>
+    <div id="email-result" class="result-card hidden" style="margin-top:10px"></div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer class="ext-footer">
+    <button id="footer-report" class="btn-ghost small">🚩 Report</button>
+    <span class="footer-divider">|</span>
+    <button id="footer-scan" class="btn-ghost small">🔄 Re-scan</button>
+    <span class="footer-divider">|</span>
+    <button id="footer-dash" class="btn-primary small">Dashboard ↗</button>
+  </footer>
+
+</div>
+<script src="popup.js"></script>
+</body>
+</html>

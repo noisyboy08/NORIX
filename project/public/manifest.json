@@ -1,0 +1,17 @@
+{
+  "name": "Norix",
+  "short_name": "Norix",
+  "description": "AI-Powered Phishing & Social Engineering Detection Platform",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#1d4ed8",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "/icons/icon192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icons/icon512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "categories": ["security", "utilities"],
+  "screenshots": [],
+  "lang": "en-IN"
+}

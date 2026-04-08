@@ -1,0 +1,8 @@
+node_modules
+.git
+project/node_modules
+project/dist
+project/coverage
+project/playwright-report
+project/test-results
+project/extension

@@ -1,0 +1,9 @@
+# Speed up uploads; Vercel runs a fresh build
+node_modules
+extension
+dist
+coverage
+playwright-report
+test-results
+**/.git
+vite.config.ts.timestamp-*

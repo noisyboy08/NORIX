@@ -1,0 +1,63 @@
+/**
+ * Hostnames / suffixes treated as high-trust for *heuristic* scoring only.
+ * Legitimate phishing can still exist (compromised sites, ads); this reduces false positives.
+ */
+export const TRUSTED_HOST_SUFFIXES: string[] = [
+  'google.com',
+  'google.co.uk',
+  'google.co.in',
+  'gmail.com',
+  'youtube.com',
+  'youtu.be',
+  'gstatic.com',
+  'googleusercontent.com',
+  'googleapis.com',
+  'g.co',
+  'microsoft.com',
+  'live.com',
+  'outlook.com',
+  'hotmail.com',
+  'office.com',
+  'azure.com',
+  'azurewebsites.net',
+  'apple.com',
+  'icloud.com',
+  'mzstatic.com',
+  'amazon.com',
+  'amazon.in',
+  'amazon.co.uk',
+  'amazonaws.com',
+  'aws.amazon.com',
+  'cloudflare.com',
+  'github.com',
+  'github.io',
+  'gitlab.com',
+  'wikipedia.org',
+  'wikimedia.org',
+  'reddit.com',
+  'twitter.com',
+  'x.com',
+  'linkedin.com',
+  'facebook.com',
+  'instagram.com',
+  'meta.com',
+  'whatsapp.com',
+  'stripe.com',
+  'paypal.com',
+  'ebay.com',
+  'netflix.com',
+  'adobe.com',
+  'openai.com',
+  'npmjs.com',
+  'jsdelivr.net',
+  'unpkg.com',
+  'stackoverflow.com',
+  'w3.org',
+  'ietf.org',
+  'localhost',
+];
+
+export function isTrustedHost(hostname: string): boolean {
+  const h = hostname.toLowerCase().replace(/^www\./, '');
+  return TRUSTED_HOST_SUFFIXES.some((s) => h === s || h.endsWith(`.${s}`));
+}
