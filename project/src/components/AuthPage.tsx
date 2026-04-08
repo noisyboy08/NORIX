@@ -22,6 +22,7 @@ export default function AuthPage({
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
   const isLight = theme === 'light';
+  const showSupabaseConfigHint = !isSupabaseAuthConfigured && import.meta.env.DEV;
 
   useEffect(() => {
     const syncTheme = () => {
@@ -87,7 +88,7 @@ export default function AuthPage({
     setError(null);
     setInfo(null);
     if (!supabase) {
-      setError('Supabase auth is not configured. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in local .env or cloud environment variables.');
+      setError('Authentication is temporarily unavailable. Please try again later.');
       return;
     }
     if (!email.trim() || !password.trim()) {
@@ -136,7 +137,7 @@ export default function AuthPage({
     setError(null);
     setInfo(null);
     if (!supabase) {
-      setError('Supabase auth is not configured. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in local .env or cloud environment variables.');
+      setError('Authentication is temporarily unavailable. Please try again later.');
       return;
     }
     setOauthLoading(provider);
@@ -327,7 +328,7 @@ export default function AuthPage({
 
               {error && <p className={`text-xs ${isLight ? 'text-red-600' : 'text-red-400'}`}>{error}</p>}
               {info && <p className={`text-xs ${isLight ? 'text-emerald-600' : 'text-emerald-400'}`}>{info}</p>}
-              {!isSupabaseAuthConfigured && (
+              {showSupabaseConfigHint && (
                 <p className={`text-[11px] ${isLight ? 'text-amber-700' : 'text-amber-400'}`}>
                   Supabase auth is not configured. Add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in local `.env` and in your cloud provider environment variables (e.g., Vercel Project Settings).
                 </p>
